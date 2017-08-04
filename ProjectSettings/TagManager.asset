@@ -9,6 +9,11 @@ TagManager:
   - Bonus
   - b_speed
   - m_deform
+  - blue_plate
+  - red_plate
+  - green_plate
+  - red_obstacle
+  - green_obstacle
   layers:
   - Default
   - TransparentFX

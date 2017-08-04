@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-	float duration = 5.0f;
-	float speed = 300.0f;
+	private float SPEED_VALUE = 300.0f;
+	private float INITIAL_DURATION = 15.0f;
 
+	public float speed;
 	public Text countText;
 	public Text winText;
 	public Text timerText;
-
 	public Vector3 center;
 	public Vector3 size;
-
 	public GameObject coin;
-
+	public Material defaultMaterial;
+	public PlateController plateController;
 
 	private Rigidbody rb;
 	private int count;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
 	public VirtualJoystick VirtualJoystick;
 
 	void Start() {
+		speed = SPEED_VALUE;
 		inGame = false;
 		resetUI ();
 		rb = GetComponent<Rigidbody> ();
@@ -65,30 +66,13 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator OnTriggerEnter(Collider other) {
+	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag ("Coin")) {
 			other.gameObject.SetActive (false);
 			count++;
 			SetCountText ();
 			timeLeft += 3.0f;
-			yield return new WaitForSeconds (1);
 			RespawnCoin ();
-		}
-
-		if (other.gameObject.CompareTag ("m_deform")) {
-			other.gameObject.SetActive (false);
-			rb.transform.localScale += new Vector3 (0, 0.6f, 0);
-			rb.transform.position += new Vector3 (0, 0.3f, 0);
-			yield return new WaitForSeconds (5);
-			rb.transform.localScale -= new Vector3 (0, 0.6f, 0);
-			rb.transform.position -= new Vector3 (0, 0.3f, 0);
-			other.gameObject.SetActive (true);
-		} else if (other.gameObject.CompareTag ("b_speed")) {
-			other.gameObject.SetActive (false);
-			speed *= 1.5f;
-			yield return new WaitForSeconds (5);
-			speed /= 1.5f;
-			other.gameObject.SetActive (true);
 		}
 	}
 
@@ -116,10 +100,12 @@ public class PlayerController : MonoBehaviour {
 		SetCountText ();
 		resetText (winText);
 		rb.transform.position = spawnPosition;
-		timeLeft = duration;
+		timeLeft = INITIAL_DURATION;
 		coin.GetComponent<Transform> ().position = GetRandomPos ();
 		coin.SetActive (true);
-		speed = 300;
+		speed = SPEED_VALUE;
+		plateController.ChangeObstaclesColor ("white");
+		changeColor (defaultMaterial);
 	}
 
 	void GameOver() {
@@ -138,5 +124,9 @@ public class PlayerController : MonoBehaviour {
 
 	void resetText(Text text) {
 		text.text = "";
+	}
+
+	public void changeColor(Material material) {
+		GetComponent<Renderer>().material = material;
 	}
 }

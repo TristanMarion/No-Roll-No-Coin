@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 671229036f17fc24cb4d482676a9766f
+timeCreated: 1501829100
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Johnny Torch Rotalic
+  fontNames:
+  - Johnny Torch Rotalic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
