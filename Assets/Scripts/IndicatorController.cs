@@ -12,6 +12,6 @@ public class IndicatorController : MonoBehaviour {
 
 	void Orbit() {
 		Vector3 vector = player.position - coin.position;
-		GetComponent<Rigidbody> ().transform.position = player.position - (vector * 0.2f);
+		GetComponent<Rigidbody> ().transform.position = player.position - ((vector * 0.2f).normalized * 3);
 	}
 }

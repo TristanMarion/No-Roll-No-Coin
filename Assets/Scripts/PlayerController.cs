@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-	private float SPEED_VALUE = 300.0f;
-	private float INITIAL_DURATION = 15.0f;
+	private float SPEED_VALUE = 50.0f;
+	private float INITIAL_DURATION = 30.0f;
 
 	public float speed;
 	public Text countText;
@@ -16,14 +16,26 @@ public class PlayerController : MonoBehaviour {
 	public GameObject coin;
 	public Material defaultMaterial;
 	public PlateController plateController;
+	public VirtualJoystick VirtualJoystick;
 
 	private Rigidbody rb;
 	private int count;
 	private float timeLeft;
 	private Vector3 spawnPosition;
 	private bool inGame;
-	public VirtualJoystick VirtualJoystick;
-
+	private Vector3[] coinsPosArr = new [] { 
+		new Vector3(20f,21.5f,240f), new Vector3(80f,21.5f,230f), new Vector3(115f,25.5f,250f), new Vector3(100f,25.5f,240f), new Vector3(130f,25.5f,260f), 
+		new Vector3(104f,25.5f,220f), new Vector3(91f,25.5f,210f), new Vector3(140f,25.5f,235f), new Vector3(145f,25.5f,245f), new Vector3(130f,25.5f,215f), 
+		new Vector3(160f,25.5f,220f), new Vector3(130f,25.5f,190f), new Vector3(150f,25.5f,170f), new Vector3(185f,24.6f,215f),	new Vector3(170f,25.5f,185f),
+		new Vector3(185f,25.5f,155f), new Vector3(185f,25.5f,127f), new Vector3(154f,25f,118f), new Vector3(37f,25.5f,205f), new Vector3(85f,25.5f,163f), 
+		new Vector3(60f,25.5f,150f), new Vector3(30f,25.5f,158f), new Vector3(9f,25.5f,125f), new Vector3(10f,25.5f,145f), new Vector3(37f,25.5f,171f), 
+		new Vector3(88f,25.5f,118f), new Vector3(117f,25.5f,97f), new Vector3(90f,25.5f,90f),new Vector3(65f,25.5f,67f), new Vector3(19f,25.5f,91f),
+		new Vector3(90f,25.5f,52f), new Vector3(102f,25.5f,22f), new Vector3(118f,25.5f,21f), new Vector3(134f,25.5f,10f), new Vector3(130f,25.5f,60f),
+		new Vector3(177f,25.5f,73f), new Vector3(161f,25.5f,47f), new Vector3(175f,25.5f,17f), new Vector3(191f,25.5f,14f), new Vector3(49f,38.6f,21f), 
+		new Vector3(37f,38f,46f), new Vector3(23f,50f,16f), new Vector3(22f,30f,60f), new Vector3(110f,25.5f,140f), new Vector3(130f,21.5f,145f), 
+		new Vector3(155f,21.5f,118f), new Vector3(185f,21.5f,105f), new Vector3(65f,25.5f,280f), new Vector3(190f,21.5f,285f), new Vector3(175f,22.5f,255f), 
+		new Vector3(165f,22.5f,285f), new Vector3(100f,25.5f,285f)};
+	
 	void Start() {
 		speed = SPEED_VALUE;
 		inGame = false;
@@ -51,7 +63,7 @@ public class PlayerController : MonoBehaviour {
 			float moveHorizontal = Input.GetAxis ("Horizontal");
 			float moveVertical = Input.GetAxis ("Vertical");
 
-			Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+			Vector3 movement = new Vector3 (-moveVertical, 0.0f, moveHorizontal);
 
 			rb.AddForce (movement * speed);
 
@@ -71,13 +83,13 @@ public class PlayerController : MonoBehaviour {
 			other.gameObject.SetActive (false);
 			count++;
 			SetCountText ();
-			timeLeft += 3.0f;
+			timeLeft += 10.0f;
 			RespawnCoin ();
 		}
 	}
 
 	Vector3 GetRandomPos() {
-		return center + new Vector3 (Random.Range (-size.x - 1, size.x - 1), 0.5f, Random.Range (-size.z - 1, size.z - 1));
+		return coinsPosArr[Random.Range (0, coinsPosArr.Length)];
 	}
 
 	void RespawnCoin() {
