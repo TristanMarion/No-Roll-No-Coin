@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour {
 	private float SPEED_VALUE = 50.0f;
 	private float INITIAL_DURATION = 30.0f;
+	private float COIN_GAIN_DURATION = 5.0f;
 
 	public float speed;
 	public Text countText;
@@ -51,8 +52,6 @@ public class PlayerController : MonoBehaviour {
 			timeLeft -= Time.deltaTime;
 			SetTimerText ();
 			if (timeLeft < 0) {
-				timeLeft = 0;
-				winText.text = "La partie est finie ! Score: " + count.ToString () + " points";
 				GameOver ();
 			}
 		}
@@ -68,7 +67,8 @@ public class PlayerController : MonoBehaviour {
 			rb.AddForce (movement * speed);
 
 			if (VirtualJoystick.InputDirection != Vector3.zero) {
-				movement = VirtualJoystick.InputDirection;
+				Vector3 tmp = VirtualJoystick.InputDirection;
+				movement = new Vector3 (-tmp.z, 0, tmp.x);
 				rb.AddForce (movement * speed);
 			}
 		} else {
@@ -83,8 +83,11 @@ public class PlayerController : MonoBehaviour {
 			other.gameObject.SetActive (false);
 			count++;
 			SetCountText ();
-			timeLeft += 10.0f;
+			timeLeft += COIN_GAIN_DURATION;
 			RespawnCoin ();
+		} 
+		if (other.gameObject.CompareTag ("spike")) {
+			GameOver ();
 		}
 	}
 
@@ -126,6 +129,8 @@ public class PlayerController : MonoBehaviour {
 		rb.velocity = Vector3.zero;
 		rb.angularVelocity = Vector3.zero;
 		coin.SetActive (false);
+		timeLeft = 0;
+		winText.text = "La partie est terminée ! Score: " + count.ToString () + " points";
 	}
 
 	void resetUI() {

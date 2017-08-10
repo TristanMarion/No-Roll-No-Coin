@@ -14,6 +14,7 @@ TagManager:
   - green_plate
   - red_obstacle
   - green_obstacle
+  - spike
   layers:
   - Default
   - TransparentFX
