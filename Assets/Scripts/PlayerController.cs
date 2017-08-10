@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour {
 	public Material defaultMaterial;
 	public PlateController plateController;
 	public VirtualJoystick VirtualJoystick;
+	public GameObject returnButton;
+	public GameObject replayButton;
 
 	public AudioSource coinSoundSource;
 	public AudioClip coinSoundClip;
@@ -46,11 +48,13 @@ public class PlayerController : MonoBehaviour {
 		speed = SPEED_VALUE;
 		inGame = false;
 		resetUI ();
+		winText.text = "Touch to play";
 		rb = GetComponent<Rigidbody> ();
 		spawnPosition = rb.transform.position;
 		coin.SetActive (false);
 		count = 0;
 		BonusInitStuff ();
+		ToggleButtons (false);
 	}
 
 	void BonusInitStuff() {
@@ -83,7 +87,7 @@ public class PlayerController : MonoBehaviour {
 				rb.AddForce (movement * speed);
 			}
 		} else {
-			if (Input.GetKeyDown (KeyCode.Return) || Input.touchCount >= 3) {
+			if (Input.GetKeyDown (KeyCode.Return) || Input.touchCount >= 1) {
 				StartGame ();
 			}
 		}
@@ -120,7 +124,7 @@ public class PlayerController : MonoBehaviour {
 		timerText.text = "Time remaining: " + timeLeft.ToString ("F1") + "s"; 
 	}
 
-	void StartGame() {
+	public void StartGame() {
 		count = 0;
 		inGame = true;
 		SetTimerText ();
@@ -134,11 +138,13 @@ public class PlayerController : MonoBehaviour {
 		plateController.ChangeObstaclesColor ("white");
 		changeColor (defaultMaterial);
 		ToggleBonuses (true);
+		ToggleButtons (false);
 		print (bonuses.Count);
 		ResetPlayer ();
 	}
 
 	void GameOver() {
+		ToggleButtons (true);
 		print (bonuses.Count);
 		inGame = false;
 		speed = 0;
@@ -166,6 +172,11 @@ public class PlayerController : MonoBehaviour {
 		winText.text = "";
 		countText.text = "";
 		timerText.text = "";
+	}
+
+	void ToggleButtons(bool enabled) {
+		returnButton.SetActive (enabled);
+		replayButton.SetActive (enabled);
 	}
 
 	void resetText(Text text) {
