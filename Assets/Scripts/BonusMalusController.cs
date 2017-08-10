@@ -8,7 +8,14 @@ public class BonusMalusController : MonoBehaviour {
 	public GameObject particleRenderer;
 	private Transform playerRBTransform;
 
+	public AudioSource bonusSoundSource;
+	public AudioSource malusSoundSource;
+	public AudioClip bonusSoundClip;
+	public AudioClip malusSoundClip;
+
 	void Start() {
+		bonusSoundSource.clip = bonusSoundClip;
+		malusSoundSource.clip = malusSoundClip;
 		playerRBTransform = player.gameObject.GetComponent<Rigidbody> ().transform;
 	}
 
@@ -33,6 +40,7 @@ public class BonusMalusController : MonoBehaviour {
 	}
 
 	IEnumerator Deform() {
+		malusSoundSource.Play ();
 		print ("Deform");
 		DeformPlayer (1);
 		yield return new WaitForSeconds (5);
@@ -42,6 +50,7 @@ public class BonusMalusController : MonoBehaviour {
 	}
 
 	IEnumerator Speed() {
+		bonusSoundSource.Play ();
 		print ("Speed");
 		player.speed *= 1.5f; 
 		yield return new WaitForSeconds (5);
@@ -51,6 +60,7 @@ public class BonusMalusController : MonoBehaviour {
 	}
 
 	IEnumerator SpeedDown() {
+		malusSoundSource.Play ();
 		print ("SpeedDown");
 		player.speed *= 0.5f; 
 		yield return new WaitForSeconds (5);
@@ -60,6 +70,7 @@ public class BonusMalusController : MonoBehaviour {
 	}
 
 	IEnumerator SizeUp() {
+		bonusSoundSource.Play ();
 		print ("SizeUp");
 		playerRBTransform.localScale *= 2; 
 		playerRBTransform.position += new Vector3(0.0f, 1.0f, 0.0f);
@@ -71,6 +82,7 @@ public class BonusMalusController : MonoBehaviour {
 	}
 
 	IEnumerator SizeDown() {
+		malusSoundSource.Play ();
 		print ("SizeDown");
 		playerRBTransform.localScale /= 2; 
 		playerRBTransform.position -= new Vector3(0.0f, 0.25f, 0.0f);
