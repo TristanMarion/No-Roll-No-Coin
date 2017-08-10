@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour {
 		new Vector3(37f,38f,46f), new Vector3(23f,50f,16f), new Vector3(22f,30f,60f), new Vector3(110f,25.5f,140f), new Vector3(130f,21.5f,145f), 
 		new Vector3(155f,21.5f,118f), new Vector3(185f,21.5f,105f), new Vector3(65f,25.5f,280f), new Vector3(190f,21.5f,285f), new Vector3(175f,22.5f,255f), 
 		new Vector3(165f,22.5f,285f), new Vector3(100f,25.5f,285f)};
+	private List<GameObject> bonuses;
 	
 	void Start() {
 		speed = SPEED_VALUE;
@@ -45,6 +46,12 @@ public class PlayerController : MonoBehaviour {
 		spawnPosition = rb.transform.position;
 		coin.SetActive (false);
 		count = 0;
+		BonusInitStuff ();
+	}
+
+	void BonusInitStuff() {
+		bonuses = new List<GameObject> (GameObject.FindGameObjectsWithTag ("Bonus"));
+		bonuses.AddRange (GameObject.FindGameObjectsWithTag ("Malus"));
 	}
 
 	void Update() {
@@ -121,16 +128,33 @@ public class PlayerController : MonoBehaviour {
 		speed = SPEED_VALUE;
 		plateController.ChangeObstaclesColor ("white");
 		changeColor (defaultMaterial);
+		ToggleBonuses (true);
+		print (bonuses.Count);
+		ResetPlayer ();
 	}
 
 	void GameOver() {
+		print (bonuses.Count);
 		inGame = false;
 		speed = 0;
 		rb.velocity = Vector3.zero;
 		rb.angularVelocity = Vector3.zero;
 		coin.SetActive (false);
 		timeLeft = 0;
+		ToggleBonuses (false);
 		winText.text = "La partie est terminée ! Score: " + count.ToString () + " points";
+	}
+
+	void ToggleBonuses(bool status) {
+		for (int i = 0; i < bonuses.Count; i++) {
+			bonuses [i].SetActive (status);
+			bonuses [i].GetComponent<BonusMalusController> ().ToggleObject (bonuses[i], status);
+		}
+	}
+
+	void ResetPlayer() {
+		rb.transform.localScale = new Vector3 (1.75f, 1.75f, 1.75f);
+		speed = SPEED_VALUE;
 	}
 
 	void resetUI() {

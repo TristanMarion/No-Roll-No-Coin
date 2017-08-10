@@ -20,10 +20,11 @@ public class BonusMalusController : MonoBehaviour {
 		}
 	}
 
-	void ToggleObject(GameObject obj, bool enabled) {
+	public void ToggleObject(GameObject obj, bool enabled) {
 		obj.GetComponent<Collider>().enabled = enabled;
 		obj.GetComponent<Renderer>().enabled = enabled;
-		particleRenderer.SetActive (enabled);
+		if (particleRenderer != null)
+			particleRenderer.SetActive (enabled);
 	}
 
 	void DeformPlayer(int coeff) {
@@ -66,7 +67,7 @@ public class BonusMalusController : MonoBehaviour {
 		StopCoroutine (type);
 		ToggleObject (this.gameObject, true);
 		playerRBTransform.position -= new Vector3(0.0f, 1.0f, 0.0f);
-		playerRBTransform.localScale /= 2; 
+		playerRBTransform.localScale /= 2;
 	}
 
 	IEnumerator SizeDown() {
