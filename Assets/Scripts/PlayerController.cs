@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour {
 	public PlateController plateController;
 	public VirtualJoystick VirtualJoystick;
 
+	public AudioSource coinSoundSource;
+	public AudioClip coinSoundClip;
+
 	private Rigidbody rb;
 	private int count;
 	private float timeLeft;
@@ -39,6 +42,7 @@ public class PlayerController : MonoBehaviour {
 	private List<GameObject> bonuses;
 	
 	void Start() {
+		coinSoundSource.clip = coinSoundClip;
 		speed = SPEED_VALUE;
 		inGame = false;
 		resetUI ();
@@ -87,6 +91,7 @@ public class PlayerController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag ("Coin")) {
+			coinSoundSource.Play ();
 			other.gameObject.SetActive (false);
 			count++;
 			SetCountText ();
